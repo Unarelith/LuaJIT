@@ -130,7 +130,7 @@ endif()
 set(LJ_DEFINITIONS "")
 
 set(LJ_ENABLE_LARGEFILE 1)
-if (ANDROID AND (${CMAKE_SYSTEM_VERSION} LESS 21))
+if (ANDROID AND ("${CMAKE_SYSTEM_VERSION}" LESS 21))
   set(LJ_ENABLE_LARGEFILE 0)
 elseif (WIN32 OR MINGW)
   set(LJ_ENABLE_LARGEFILE 0)
@@ -310,27 +310,27 @@ if ("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Windows")
   set(BUILDVM_EXE buildvm.exe)
 endif()
 
-if (NOT CMAKE_CROSSCOMPILING)
+# if (NOT CMAKE_CROSSCOMPILING)
   add_subdirectory(host/cmake/buildvm)
   set(BUILDVM_PATH $<TARGET_FILE:buildvm>)
   add_dependencies(buildvm buildvm_arch_h)
-else()
-  set(BUILDVM_PATH ${CMAKE_CURRENT_BINARY_DIR}/buildvm/${BUILDVM_EXE})
-
-  make_directory(${CMAKE_CURRENT_BINARY_DIR}/buildvm)
-
-  add_custom_command(OUTPUT ${BUILDVM_PATH}
-    COMMAND ${CMAKE_COMMAND} ${CMAKE_CURRENT_SOURCE_DIR}/host/cmake/buildvm
-            -DEXTRA_COMPILER_FLAGS_FILE=${BUILDVM_COMPILER_FLAGS_PATH}
-    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_CURRENT_BINARY_DIR}/buildvm
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/host/cmake/buildvm/CMakeLists.txt
-    DEPENDS buildvm_arch_h
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/buildvm)
-
-  add_custom_target(buildvm ALL
-    DEPENDS ${BUILDVM_PATH}
-  )
-endif()
+# else()
+#   set(BUILDVM_PATH ${CMAKE_CURRENT_BINARY_DIR}/buildvm/${BUILDVM_EXE})
+#
+#   make_directory(${CMAKE_CURRENT_BINARY_DIR}/buildvm)
+#
+#   add_custom_command(OUTPUT ${BUILDVM_PATH}
+#     COMMAND ${CMAKE_COMMAND} ${CMAKE_CURRENT_SOURCE_DIR}/host/cmake/buildvm
+#             -DEXTRA_COMPILER_FLAGS_FILE=${BUILDVM_COMPILER_FLAGS_PATH}
+#     COMMAND ${CMAKE_COMMAND} --build ${CMAKE_CURRENT_BINARY_DIR}/buildvm
+#     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/host/cmake/buildvm/CMakeLists.txt
+#     DEPENDS buildvm_arch_h
+#     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/buildvm)
+#
+#   add_custom_target(buildvm ALL
+#     DEPENDS ${BUILDVM_PATH}
+#   )
+# endif()
 
 set(LJVM_MODE elfasm)
 if (APPLE)
